@@ -7,5 +7,5 @@ describe("inspectionResultSchema", () => {
   it("rejects unknown properties", () => expect(inspectionResultSchema.safeParse({ ...valid, reasoning: "hidden" }).success).toBe(false));
   it("rejects unreferenced frames", () => { const value = structuredClone(valid); value.findings[0].sourceFrameIds = ["other"]; expect(inspectionResultSchema.safeParse(value).success).toBe(false); });
   it("rejects passed steps without evidence", () => { const value = structuredClone(valid); value.procedureAssessment = { stepId: "visual", status: "passed", evidence: [], missingEvidence: [] }; expect(inspectionResultSchema.safeParse(value).success).toBe(false); });
-  it("uses the Responses API strict-schema union keyword", () => { const serialized = JSON.stringify(publicInspectionJsonSchema); expect(serialized).toContain('"anyOf"'); expect(serialized).not.toContain('"oneOf"'); });
+  it("uses the Responses API strict-schema union keyword", () => { const serialized = JSON.stringify(publicInspectionJsonSchema); expect(serialized).toContain('"anyOf"'); expect(serialized).not.toContain('"oneOf"'); expect(serialized).toContain('"type":{"type":"string","const":"box"}'); });
 });
