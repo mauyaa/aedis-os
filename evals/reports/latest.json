@@ -1,0 +1,15 @@
+{
+  "generatedAt": "2026-07-22T00:00:00.000Z",
+  "mode": "deterministic-contract-fixtures",
+  "liveModelEvaluation": false,
+  "sampleCount": 8,
+  "metrics": {
+    "structuredOutputValidity": 1,
+    "invalidCoordinateRejection": 1,
+    "unknownPropertyRejection": 1,
+    "confirmationTamperRejection": 1
+  },
+  "notMeasuredWithoutCredentials": ["findingCategoryAccuracy", "falsePositiveRate", "confidenceCalibration", "boundingBoxIoU", "correctionVerification"],
+  "note": "These are deterministic contract and security fixture results, not GPT-5.6 vision accuracy claims. Run the optional live evaluation with configured OpenAI credentials before publishing model-quality metrics."
+}
+

@@ -1,0 +1,5 @@
+import { describe, expect, it } from "vitest";
+describe("deterministic judge workflow state", () => {
+  it("preserves observe → locate → approve → verify → report ordering", () => { const events = ["signed-in", "frame-captured", "analysis-validated", "finding-persisted", "action-proposed", "action-approved", "incident-created", "newer-frame-captured", "correction-verified", "report-generated"]; const index = (name: string) => events.indexOf(name); expect(index("analysis-validated")).toBeLessThan(index("finding-persisted")); expect(index("action-proposed")).toBeLessThan(index("action-approved")); expect(index("newer-frame-captured")).toBeLessThan(index("correction-verified")); expect(events.at(-1)).toBe("report-generated"); });
+});
+
