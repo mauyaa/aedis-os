@@ -17,6 +17,6 @@
 - [ ] Deploy HTTPS application and record URL
 - [ ] Create limited hosted judge access and quota
 - [ ] Run optional live model evaluation and record measured metrics
-- [ ] Record demo and publish repository
+- [x] Publish repository: https://github.com/mauyaa/aedis-os
+- [ ] Record demo
 - [ ] Add primary Codex `/feedback` Session ID to Devpost form
-

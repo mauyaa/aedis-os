@@ -46,7 +46,7 @@ Hosted testing link: **not yet assigned; deployment is a required owner action b
 
 ## Repository
 
-Repository URL: **not yet assigned; publish this repository before submission.**
+Repository URL: https://github.com/mauyaa/aedis-os
 
 ## Video
 
@@ -55,4 +55,3 @@ Demo URL: **not yet recorded.** Use the exact 2:48 script in `DEMO_SCRIPT.md`.
 ## Codex Session ID
 
 Primary `/feedback` Session ID: **not yet generated; run `/feedback` in the original project task and add the returned ID.**
-

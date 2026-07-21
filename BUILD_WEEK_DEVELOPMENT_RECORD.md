@@ -33,6 +33,7 @@ The human chose the Aegis-OS mission, electronics scenario, closed-loop requirem
 
 ## Commit timeline
 
-No Aegis-OS commit existed or was created during this task at the time this record was written. Use the actual repository history after the owner creates commits; do not add fictional hashes.
+- [`6a5fc48`](https://github.com/mauyaa/aedis-os/commit/6a5fc48) — initial complete Aegis-OS inspection platform: application, OpenAI adapters, security controls, tests, judge kit, evaluation artifact, and submission documentation.
+- This documentation follow-up records the real GitHub publication; no pre-existing Aegis-OS commit was present when the build began.
 
 - [ ] Add primary Codex `/feedback` Session ID to Devpost form
