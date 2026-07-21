@@ -105,7 +105,7 @@ Follow [JUDGE_TESTING_INSTRUCTIONS.md](JUDGE_TESTING_INSTRUCTIONS.md). The origi
 
 ## Deployment
 
-Deploy as a Node.js Next.js application, configure HTTPS and all required server environment variables, then verify microphone/camera permissions and OpenAI account access to the configured models. A hosted URL has not been created in this task and is not claimed.
+Production is deployed at https://aegis-os-delta.vercel.app as a Node.js Next.js application. HTTPS, signed workspace authentication, security headers, and PDF generation were verified against production. The live GPT-5.6 request reaches OpenAI with an accepted strict schema but currently returns `429 exceeded current quota`; API billing/credits must be enabled before the judge flow can complete.
 
 ## Security and privacy
 
@@ -114,4 +114,3 @@ Secrets stay server-side; session and action inputs are signed and validated; co
 ## Build Week record, limitations, and license
 
 See [BUILD_WEEK_DEVELOPMENT_RECORD.md](BUILD_WEEK_DEVELOPMENT_RECORD.md), [IMPLEMENTATION_STATUS.md](IMPLEMENTATION_STATUS.md), and [docs/judging/KNOWN_LIMITATIONS.md](docs/judging/KNOWN_LIMITATIONS.md). Licensed under MIT; judge assets are project-owned AI-generated material documented in [ASSET_LICENSES.md](docs/judging/ASSET_LICENSES.md).
-

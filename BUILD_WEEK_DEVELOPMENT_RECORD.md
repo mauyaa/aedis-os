@@ -26,6 +26,7 @@ This project task is the major Codex session. Codex read the product specificati
 - Initial production build depended on a Google Fonts network fetch; replaced it with the bundled `geist` package and rebuilt successfully.
 - The production audit found a moderate PostCSS advisory; pinned the transitive dependency to 8.5.10, refreshed the lockfile, and verified zero known production vulnerabilities.
 - A floating-point exact-equality assertion in the spatial test was corrected to the appropriate tolerance check.
+- Production smoke testing found two Responses API strict-schema incompatibilities (`oneOf` and untyped `const` discriminators); both were fixed with regression coverage. The subsequent request reached OpenAI and exposed the remaining account quota blocker truthfully.
 
 ## Human decisions
 

@@ -2,7 +2,9 @@
 
 ## Hosted path status
 
-No hosted URL or judge password is claimed yet. The owner must deploy with the environment values below. Local evaluation requires Node 20.9+, pnpm, and server credentials; judges never enter an OpenAI key in the browser.
+Production URL: https://aegis-os-delta.vercel.app
+
+The hosted shell, signed judge session, security headers, and PDF report are verified. Enable OpenAI API billing/credits before judging; the current configured key reaches OpenAI but returns quota error 429. Judges never enter an OpenAI key in the browser.
 
 ## Required hosted configuration
 
@@ -20,4 +22,3 @@ No hosted URL or judge password is claimed yet. The owner must deploy with the e
 8. Complete the inspection, download the PDF, and inspect History/Timeline.
 
 Expected fault: the white cable at J2 is visibly disconnected above its socket. Do not expect or accept electrical measurement claims.
-

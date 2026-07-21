@@ -12,9 +12,10 @@
 - [x] Internal incident and signed external delivery adapter
 - [x] PDF report and session replay
 - [x] Test and evaluation commands
-- [ ] Configure production OpenAI credentials
+- [x] Configure production OpenAI credentials and model IDs
+- [ ] Enable OpenAI API billing/credits and pass live GPT-5.6 smoke test
 - [ ] Deploy a separately authenticated webhook receiver
-- [ ] Deploy HTTPS application and record URL
+- [x] Deploy HTTPS application: https://aegis-os-delta.vercel.app
 - [ ] Create limited hosted judge access and quota
 - [ ] Run optional live model evaluation and record measured metrics
 - [x] Publish repository: https://github.com/mauyaa/aedis-os

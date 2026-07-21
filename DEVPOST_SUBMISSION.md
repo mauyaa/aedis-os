@@ -42,7 +42,7 @@ The repository was empty at the start of the recorded 22 July 2026 Codex task. T
 
 ## Testing link and instructions
 
-Hosted testing link: **not yet assigned; deployment is a required owner action before submission.** Follow `JUDGE_TESTING_INSTRUCTIONS.md` after deployment.
+Hosted testing link: https://aegis-os-delta.vercel.app — enable OpenAI API billing/credits before submission, then follow `JUDGE_TESTING_INSTRUCTIONS.md`.
 
 ## Repository
 
