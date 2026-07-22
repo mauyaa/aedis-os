@@ -10,6 +10,5 @@
 - Revalidate organization access inside route handlers; proxy or client state is not authorization.
 - New UI commands must be schema-bound; never execute model-generated HTML or JavaScript.
 - Run lint, typecheck, unit, integration, end-to-end, build, and evaluation gates before release.
-- Tests may use deterministic fixtures. Hosted judge analysis must use live GPT-5.6.
+- Tests may use deterministic fixtures. Hosted judge analysis uses the real decoded-pixel Local Spatial Engine; optional GPT-5.6 is disabled unless explicitly funded and configured.
 - Documentation must distinguish measured facts, configuration gaps, and future work.
-

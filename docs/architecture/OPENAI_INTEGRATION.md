@@ -1,12 +1,13 @@
-# OpenAI integration
+# Optional OpenAI integration
 
-## Realtime loop
+The hosted judge deployment sets `OPENAI_LIVE_ENABLED=false`. Neither endpoint is called by the default Local Spatial workflow.
 
-The authenticated browser creates a WebRTC offer and posts SDP to `/api/realtime`. The route builds the versioned electronics prompt, hashes organization and internal user IDs into the safety identifier, sets server VAD and `marin` voice, declares the strict precision-analysis tool, and relays multipart SDP/session configuration to `/v1/realtime/calls` with the server API key. The SDP answer returns to the peer. Speech start interrupts output; data-channel function events trigger real capture.
+## GPT-5.6 precision adapter
 
-## Precision loop
+When explicitly enabled, `/api/analysis` accepts `engine: "openai-precision"`, checks the signed inspection session and bounded request, sends one explicit image to the Responses API, requests the strict `inspection_result` JSON Schema, runs independent Zod validation, then enforces request ID, frame ID, previous-finding, evidence, scene, confidence, and newer-frame rules. One schema repair attempt is allowed. Timeout, quota, rate, authentication, availability, and repeated structured-output failures are mapped without returning provider bodies to the browser.
 
-The browser captures JPEG pixels from the current camera video element or selected image. `/api/analysis` validates size, IDs, intent, current step, and prior findings. The route calls environment-configurable `gpt-5.6` with high image detail and a strict `inspection_result` JSON Schema. The result is parsed and independently validated. Coordinates outside 0–1000, overflowing boxes, missing evidence, unknown properties, invalid frame references, and evidence-free passes fail. One repair request is allowed; repeated invalid output becomes HTTP 502.
+## GPT-Realtime-2.1 adapter
 
-The UI never displays hidden reasoning. It displays only factual connection, capture, analysis, finding, verification, approval, execution, and failure states.
+When explicitly enabled, `/api/realtime` validates SDP, builds a server-side session, and relays it with the server API key. `createRealtimeToolHandler` validates `request_precision_analysis`, preserves and deduplicates `call_id`, awaits a validated precision result, sends a bounded `function_call_output`, then sends `response.create`. It excludes images, prompts, credentials, hidden reasoning, and unbounded output. Failures return a truthful bounded tool failure; a disconnected channel receives nothing.
 
+The optional adapters were not live-verified in the no-credit release and are not represented as active production capabilities.

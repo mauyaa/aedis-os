@@ -1,29 +1,27 @@
-# Data flow
+# Submitted data flow
 
 ```mermaid
 sequenceDiagram
   participant J as Judge
   participant B as Browser
-  participant R as Realtime API
-  participant P as Precision route
-  participant G as GPT-5.6
-  participant X as External receiver
-  J->>B: Speak inspection request
-  B<->>R: WebRTC audio + tool events
-  R-->>B: request_precision_analysis
-  B->>B: Capture selected actual frame
-  B->>P: Signed session + JPEG + context
-  P->>G: Responses API + strict schema
-  G-->>P: Structured spatial result
-  P->>P: Zod revalidation
-  P-->>B: Validated result + metadata
-  B->>B: Persist finding, overlay, procedure, audit
-  J->>B: Approve exact incident action
-  B->>X: Server-signed webhook if configured
+  participant A as Analysis route
+  participant L as Local Spatial Engine
+  participant P as Inspection pack
+  J->>B: Load/upload/capture image
+  B->>B: Decode visual into explicit PNG frame
+  B->>A: Signed session + frame + intent + prior findings
+  A->>A: Validate session, body, IDs, dimensions and MIME
+  A->>L: Decode actual pixels
+  L->>P: Load electronics-j2@1.0.0
+  L->>L: Scene, alignment, global and J2 ROI distances
+  L-->>A: Strict result + local engine metadata
+  A->>A: Bind request, frame and verification outcomes
+  A-->>B: Validated result
+  B->>B: Overlay, timeline and procedure transition
+  J->>B: Approve exact internal incident
   J->>B: Supply newer corrected frame
-  B->>G: Verification analysis
-  B->>B: Resolve only from newer evidence
+  B->>A: Explicit verification request
+  A-->>B: resolved / still_present / uncertain
 ```
 
-Privacy boundary: the live preview and microphone exist only in the browser/WebRTC path. No continuous video or raw audio repository exists. Evidence JPEG data is sent only on a defined capture trigger and is not persisted by the current server.
-
+Continuous video and raw audio remain in the browser. Only an explicit captured frame is sent. The server does not persist evidence in this MVP. Browser Speech Recognition and speech synthesis are device-native controls; they are not OpenAI Realtime.

@@ -1,0 +1,22 @@
+{
+  "title": "Aegis Local Spatial Engine judge-kit evaluation",
+  "engine": "local-spatial",
+  "engineVersion": "1.0.0",
+  "inspectionPack": "electronics-j2@1.0.0",
+  "schemaVersion": "1.0",
+  "evaluatedAt": "2026-07-22T00:00:00.000Z",
+  "sampleCount": 8,
+  "fixtures": ["fault reference", "renamed identical pixels", "brightness-adjusted fault", "corrected reference", "resized corrected", "blurred", "cropped", "unrelated synthetic image"],
+  "metrics": {
+    "faultDetection": { "passed": 3, "total": 3 },
+    "correctedState": { "passed": 2, "total": 2 },
+    "falsePositivesOnCorrected": 0,
+    "sceneRejection": { "passed": 3, "total": 3 },
+    "verificationCorrectness": { "passed": 2, "total": 2 },
+    "overlayRegionIoU": 1,
+    "deterministicRepeatability": 1
+  },
+  "expectedOverlay": { "type": "box", "x": 610, "y": 160, "width": 145, "height": 240, "label": "J2 connector" },
+  "latency": { "maximumAcceptedMedianMs": 500, "note": "Automated release gate threshold on the CI runner; not a production latency claim." },
+  "limitations": ["Small project-owned judge kit, not a general industrial benchmark.", "Reference engine is specific to electronics-j2 inspection pack.", "No electrical state or hidden condition is inferred."]
+}

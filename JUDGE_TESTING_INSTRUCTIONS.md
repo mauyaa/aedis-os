@@ -1,24 +1,25 @@
-# Judge testing instructions
+No API key, payment, account, or proprietary hardware is required.
 
-## Hosted path status
+# Aegis-OS judge test — under three minutes
 
-Production URL: https://aegis-os-delta.vercel.app
+Open https://aegis-os-delta.vercel.app in current Chrome.
 
-The hosted shell, signed judge session, security headers, and PDF report are verified. Enable OpenAI API billing/credits before judging; the current configured key reaches OpenAI but returns quota error 429. Judges never enter an OpenAI key in the browser.
+1. Keep the prefilled email and workspace display name. Leave access code empty unless the organizer supplied one. Choose **Enter judge workspace**.
+2. Confirm the header says **EPHEMERAL JUDGE WORKSPACE** and the engine bar says **Local Spatial v1** / **LOCAL SPATIAL ENGINE · AVAILABLE**.
+3. Choose **Load fault target**, then **Inspect frame**.
+4. Confirm a J2 box appears and the finding says **J2 connector is not fully seated**. Expand the engine badge to see the real measurements used.
+5. Choose **Create internal incident**. Review the exact effect. Choose **Reject** once, repeat, then **Confirm exact action**.
+6. Choose **Corrected** in the control deck, then **Verify correction**.
+7. Confirm the finding is `resolved`, a new frame ID is shown, and the timeline records the explicit transition.
+8. Choose **Complete inspection**, verify the local History entry, then **Download checksummed PDF**.
 
-## Required hosted configuration
+Optional Chrome voice path: choose **Browser voice** and say “inspect this board,” “verify correction,” “create incident,” “complete inspection,” “download report,” or “stop listening.” The transcript is visible, ambiguous phrases are ignored, and incidents still require manual approval.
 
-`OPENAI_API_KEY`, `OPENAI_REALTIME_MODEL=gpt-realtime-2.1`, `OPENAI_INSPECTION_MODEL=gpt-5.6`, `SESSION_SECRET`, `AEGIS_EXTERNAL_WEBHOOK_URL`, and `AEGIS_EXTERNAL_WEBHOOK_SECRET`.
+The public path analyzes real decoded pixels against `electronics-j2@1.0.0`. It does not call OpenAI and should not show a quota error. The OpenAI Precision and Realtime adapters are optional, disabled, and irrelevant to this test.
 
-## Three-minute test path
-
-1. Enter `judge@aegis.local` and `Aegis Judge Lab` on the workspace gate.
-2. Click **Load fault target** (or connect a camera and display `public/judge-kit/aegis-board-fault.png`).
-3. Start voice and say: “Inspect this board and tell me whether I can continue.” If microphone access is unavailable, click **Inspect frame**.
-4. Observe actual capture, GPT-5.6 analysis, spatial overlay, evidence, confidence, and procedure state.
-5. Click **Create maintenance incident**, inspect the exact effect, then approve it. Confirm the internal incident and external delivery reference.
-6. Return to the empty/source selector as needed and load `aegis-board-corrected.png`, then click **Verify correction**.
-7. Confirm the newer frame resolves the prior finding only when the live result supports it.
-8. Complete the inspection, download the PDF, and inspect History/Timeline.
-
-Expected fault: the white cable at J2 is visibly disconnected above its socket. Do not expect or accept electrical measurement claims.
+GPT-5.6 was meaningfully used through Codex during the design,
+implementation, testing, and adversarial review of Aegis-OS.
+The submitted hosted judge path uses the deterministic Local Spatial
+Engine because Build Week credits are Codex credits rather than API credits.
+The optional GPT-5.6 Responses adapter remains implemented but is not
+presented as active in the submitted deployment.

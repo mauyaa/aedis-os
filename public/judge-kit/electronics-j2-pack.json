@@ -1,0 +1,30 @@
+{
+  "id": "electronics-j2",
+  "version": "1.0.0",
+  "name": "Aegis electronics J2 connector seating inspection",
+  "canonicalImage": { "width": 1536, "height": 1024 },
+  "references": {
+    "correctImage": "/judge-kit/aegis-board-corrected.png",
+    "knownFaultImages": ["/judge-kit/aegis-board-fault.png"]
+  },
+  "sceneRequirements": {
+    "minimumBrightness": 0.14,
+    "maximumBrightness": 0.90,
+    "minimumSharpness": 0.018,
+    "minimumGlobalSimilarity": 0.72
+  },
+  "checks": [{
+    "id": "j2-connector-seat",
+    "name": "J2 connector seating",
+    "category": "connector_seating",
+    "severity": "high",
+    "region": { "x": 610, "y": 160, "width": 145, "height": 240 },
+    "method": "connector-seat",
+    "passThreshold": 0.11,
+    "failThreshold": 0.11,
+    "faultTitle": "J2 connector is not fully seated",
+    "faultDescription": "The J2 plug is visibly elevated and offset from the board-mounted header compared with the seated reference.",
+    "correctiveAction": "Keep power off. Align J2 squarely over the header and press straight down until the plug is fully seated, then capture a new frame.",
+    "verificationMethod": "Capture a newer full-board frame and confirm the J2 plug body is flush and aligned with the header outline."
+  }]
+}

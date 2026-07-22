@@ -1,45 +1,44 @@
-# Implementation status
+# Aegis-OS implementation status
 
-## Working
+Status date: 2026-07-22
 
-- Sign-in, isolated browser workspace, refresh persistence, and completed-session replay
-- Live camera, microphone, upload, and included before/after judge images
-- Browser WebRTC initialization via server-mediated `/v1/realtime/calls`
-- Realtime VAD, barge-in configuration, tool-driven precision request, real waveform
-- GPT-5.6 Responses API with strict JSON Schema plus independent Zod validation and one retry
-- Spatial box transforms for contain, cover, letterbox, crop, and mirror
-- Finding persistence, correction verification, procedure progression, and audit timeline
-- Bound confirmation, internal incident, optional signed webhook, duplicate-use prevention
-- Generated PDF report and SHA-256 response checksum
-- Responsive premium workspace and explicit failure states
-- Unit, integration, workflow, build, and deterministic contract evaluation gates
+## Implemented and verified locally
 
-## Configuration required
+- Local Spatial Engine `1.0.0` decodes PNG/JPEG/WebP pixels and validates MIME signatures, byte size, dimensions, pixel count, format, and non-empty content.
+- `electronics-j2@1.0.0` pack drives scene requirements, references, J2 ROI, thresholds, correction, and verification; filenames and sample-button labels are not engine inputs.
+- Brightness, contrast, gradient sharpness, aspect alignment, global distance, J2 correct/fault distances, confidence margin, and uncertainty are measured.
+- Fault image produces the J2 box and high-severity finding; corrected image passes.
+- Verification uses an explicit matching outcome and a newer frame. `uncertain` and `still_present` do not resolve; poor scenes cannot resolve.
+- Browser Voice Commands use device-native recognition/synthesis where supported and retain manual buttons and human incident approval.
+- Internal incidents, exact confirmation, local history, and checksummed PDF work.
+- Optional GPT-5.6 Responses, GPT-Realtime-2.1 WebRTC, strict schema, runtime validation, request binding, and bounded function-result handoff remain implemented behind `OPENAI_LIVE_ENABLED=true`.
+- CI, unit, integration, desktop/mobile Playwright E2E, no-credit, build, evaluation, secret scan, and dependency audit gates are defined.
 
-- OpenAI API billing/credits for the configured key; production currently returns quota error 429
-- Separately deployed webhook URL and HMAC secret for a real external reference
-- Private judge access details and quota policy
+## Local release evidence
 
-## Not complete / not claimed
+`pnpm test` passes 11 files / 34 tests. `pnpm test:e2e` passes the complete workflow on desktop and mobile Chromium. `pnpm test:no-credit` passes 13 targeted tests plus the desktop browser journey with OpenAI disabled and no provider request. The eight-case local evaluation passes all checked-in claims.
 
-- Server database, Supabase Auth/RLS, multi-device persistence, durable job queue
-- Stored evidence binaries and annotated before/after images in the PDF
-- Live-model accuracy dataset metrics and load test
-- Configured external receiver, judge credentials, Devpost video/Session ID
-- Optical-flow tracking, Web Serial, document retrieval, secondary domain packs
+## Production state
 
-## Verified commands — 22 July 2026
+The primary URL is https://aegis-os-delta.vercel.app. Production verification for the new Local Spatial release must be updated after the final commit is deployed. The previous deployment reached OpenAI but had no funded quota; that path is no longer the public judge default.
 
-- `pnpm lint` — passed, zero warnings
-- `pnpm typecheck` — passed
-- `pnpm test` — passed, 7 files / 17 tests
-- `pnpm test:integration` — passed, 2 files / 3 tests
-- `pnpm test:e2e` — passed, 1 file / 1 deterministic workflow test
-- `pnpm build` — passed, static application plus six dynamic API routes
-- `pnpm eval` — passed, 1 deterministic contract-evaluation test
-- `pnpm security:scan` — passed; no known client secret patterns
-- `pnpm audit:ci` — passed; no known production dependency vulnerabilities after pinning PostCSS 8.5.10
+## Deliberately disabled or limited
 
-Production URL: https://aegis-os-delta.vercel.app
+- Hosted OpenAI Precision and OpenAI Realtime are disabled and not live-verified.
+- Browser history and serverless nonce/rate buckets are non-durable.
+- External delivery is unconfigured; internal incidents work.
+- Camera alignment uses a fixed guide and rejection, not automatic perspective correction.
+- One project-owned electronics J2 pack is shipped; no general industrial-accuracy claim is made.
 
-Production smoke test: homepage 200; CSP present; Permissions Policy present; signed authentication 200; PDF report 200 with SHA-256 checksum. GPT-5.6 request reached OpenAI with the strict spatial schema accepted, then returned `429 exceeded current quota`. The webhook path remains unconfigured.
+GPT-5.6 was meaningfully used through Codex during the design,
+implementation, testing, and adversarial review of Aegis-OS.
+The submitted hosted judge path uses the deterministic Local Spatial
+Engine because Build Week credits are Codex credits rather than API credits.
+The optional GPT-5.6 Responses adapter remains implemented but is not
+presented as active in the submitted deployment.
+
+## Submission blockers outside the repository
+
+- Record and upload the narrated 2:35–2:50 public YouTube video.
+- Run `/feedback` in this exact primary Codex task and enter the returned Session ID.
+- Enter the project in Devpost under Work & Productivity before the deadline.

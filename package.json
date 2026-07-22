@@ -10,7 +10,10 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:integration": "vitest run tests/integration",
-    "test:e2e": "vitest run tests/e2e",
+    "test:e2e": "node scripts/run-playwright.mjs",
+    "test:no-credit": "node scripts/no-credit-gate.mjs",
+    "test:live": "node scripts/openai-live-smoke.mjs",
+    "test:production": "node scripts/live-smoke.mjs",
     "eval": "vitest run evals",
     "security:scan": "node scripts/scan-client-secrets.mjs",
     "audit:ci": "pnpm audit --prod --audit-level high"
@@ -24,9 +27,11 @@
     "pdf-lib": "^1.17.1",
     "react": "19.2.4",
     "react-dom": "19.2.4",
+    "sharp": "^0.35.3",
     "zod": "^4.4.3"
   },
   "devDependencies": {
+    "@playwright/test": "^1.61.1",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
@@ -41,7 +46,8 @@
   },
   "pnpm": {
     "overrides": {
-      "postcss@<8.5.10": "8.5.10"
+      "postcss@<8.5.10": "8.5.10",
+      "sharp@<0.35.0": "0.35.3"
     }
   }
 }

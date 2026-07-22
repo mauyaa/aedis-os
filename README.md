@@ -1,91 +1,99 @@
 # Aegis-OS
 
-The realtime multimodal inspection OS that sees visible faults, locates them, guides corrections, takes approved action, and preserves a verifiable evidence trail.
+Aegis-OS is a resilient spatial inspection workspace that performs deterministic local checks without cloud dependency and includes an optional OpenAI precision architecture for broader inspections.
 
-## The problem
+**Live judge build:** https://aegis-os-delta.vercel.app
 
-Electronics technicians often inspect equipment with occupied hands, fragmented instructions, and no consistent record of what was visible before a correction. A missed connector, delayed incident, or weak evidence trail forces repeated work. Aegis-OS makes the camera, voice loop, spatial findings, procedure, approvals, and report one coherent workspace.
+**Repository:** https://github.com/mauyaa/aedis-os
 
-## Users
+**Category:** Work & Productivity
 
-Electronics technicians, field-service engineers, hardware labs, maintenance operations, and technical QA teams. Aegis-OS is not a medical device and does not certify electrical safety.
+## Judge journey
 
-## Working product flow
+No API key, payment, account, or proprietary hardware is required.
 
-Sign in → choose camera or owned sample → start Realtime voice → request inspection → capture an actual frame → GPT-5.6 returns a strict spatial result → render and persist the finding → correct the visible issue → analyze a newer frame → approve an incident → complete → download a checksummed PDF → reopen history.
+1. Enter the ephemeral judge workspace.
+2. Load the owned fault target and choose **Inspect frame**.
+3. Review measured scene quality, Local Spatial v1 metadata, the normalized J2 overlay, confidence, evidence, and failed procedure state.
+4. Create an internal incident, review the exact action, reject or approve it.
+5. Load the corrected target and choose **Verify correction**.
+6. Review the explicit `resolved` outcome tied to a newer frame ID.
+7. Complete the inspection, download the checksummed PDF, and open local history.
 
-```mermaid
-flowchart LR
-  B["Browser camera / image"] --> C["Selected JPEG frame"]
-  V["Realtime WebRTC voice"] --> T["Turn coordinator"]
-  T --> C
-  C --> A["Authenticated analysis route"]
-  A --> G["GPT-5.6 Responses API"]
-  G --> Z["Strict Zod contract"]
-  Z --> U["Overlay + finding + procedure"]
-  U --> P["Bound confirmation token"]
-  P --> I["Internal incident + signed webhook"]
-  U --> R["SHA-256 PDF report"]
-```
+Chrome users can perform the same commands through device-native **Browser Voice Commands**. Every command also has a button.
 
-## OpenAI integration
+## Working architecture
 
-The browser never receives `OPENAI_API_KEY`. `POST /api/realtime` authenticates a signed Aegis session, derives a SHA-256 safety identifier, assembles the versioned electronics prompt, and forwards the WebRTC SDP to `POST https://api.openai.com/v1/realtime/calls` using `gpt-realtime-2.1`. Server VAD supports immediate barge-in. The data channel exposes only the schema-bound `request_precision_analysis` tool.
+The public deployment defaults to `local-spatial`. Submitted image pixels are decoded on the server with MIME-signature, byte-size, pixel-count, dimension, and format validation. The versioned `electronics-j2@1.0.0` pack defines the canonical reference, known-fault reference, scene thresholds, J2 region, decision thresholds, safe correction, and verification method.
 
-`POST /api/analysis` sends the selected high-quality frame to the Responses API using environment-configurable `gpt-5.6`, high image detail, and strict JSON Schema. The result is revalidated with Zod, including coordinate bounds, evidence requirements, frame references, enum closure, and passed-step evidence. One malformed response is retried; a second failure becomes a controlled error. GPT-5.6 performs the central scene-quality, visible-fault, localization, procedure, and verification work—it is not decorative.
+The engine measures normalized luminance, contrast, gradient sharpness, aspect-ratio alignment, global reference distance, and J2-region reference distance. Weak margins return `uncertain`; poor scenes never resolve findings. Spatial boxes use the normalized 0–1000 contract and are mapped through contain, cover, crop, letterbox, and mirror transforms.
 
-## Codex use and human decisions
+The optional `openai-precision` adapter retains the official OpenAI SDK, GPT-5.6 Responses request, strict JSON Schema, Zod validation, request/frame binding, verification outcomes, timeout and error mapping. The GPT-Realtime-2.1 SDP adapter and bounded function-result handoff also remain implemented. Both are disabled unless `OPENAI_LIVE_ENABLED=true`; the hosted judge flow never calls them.
 
-Codex created the implementation, interaction design, API boundaries, schemas, confirmation protocol, spatial transform, PDF output, tests, judge assets, and submission documentation in the primary project task. The human builder supplied the product mission, required closed loop, electronics focus, technology constraints, design direction, risk policy, and hackathon priorities. No development history or Session ID has been invented.
+## Engine matrix
 
-## Features
+| Capability | Local Spatial | OpenAI Precision |
+| --- | --- | --- |
+| Submitted judge deployment | Available | Disabled |
+| Requires API credits | No | Yes |
+| Scene-quality check | Yes | Implemented adapter |
+| J2 reference inspection | Yes | Implemented adapter |
+| Spatial overlays | Yes | Implemented adapter |
+| Correction verification | Yes | Implemented adapter |
+| Browser voice commands | Yes | N/A |
+| OpenAI Realtime voice | No | Implemented adapter |
 
-- Signed, organization-scoped judge session
-- Camera, microphone, upload, and owned fault/corrected targets
-- Realtime browser WebRTC voice with real audio-level waveform and interruption
-- Actual frame capture; no continuous video upload or audio recording
-- Strict GPT-5.6 inspection contract with spatial overlays
-- Newer-frame correction verification and procedure progression
-- Exact-argument confirmation tokens and replay rejection
-- Always-available internal incident plus optional HMAC-signed external webhook
-- Append-style session timeline, local history replay, and evidence states
-- Actual PDF report with SHA-256 checksum
-- Honest errors for permission, credential, schema, network, and delivery failures
-- Responsive technical workspace for desktop, tablet, and mobile
+## Why the submitted judge mode is local
 
-## Technology
+Build Week provided Codex credits rather than OpenAI API credits.
+Aegis-OS therefore ships a fully working Local Spatial Engine for the
+public judge path. GPT-5.6 was used meaningfully through Codex to design,
+implement, test, and adversarially review the inspection contracts,
+coordinate system, safety policy, and release architecture.
 
-Next.js 16 App Router, React 19, strict TypeScript, Tailwind CSS, Zod, OpenAI JavaScript SDK, PDF-Lib, Lucide, WebRTC, MediaDevices, Web Audio, local browser persistence, Vitest, and Vercel-compatible route handlers.
+The repository also contains the optional GPT-5.6 Responses and Realtime
+adapters. They are disabled in the hosted judge deployment and are not
+represented as active.
+
+GPT-5.6 was meaningfully used through Codex during the design,
+implementation, testing, and adversarial review of Aegis-OS.
+The submitted hosted judge path uses the deterministic Local Spatial
+Engine because Build Week credits are Codex credits rather than API credits.
+The optional GPT-5.6 Responses adapter remains implemented but is not
+presented as active in the submitted deployment.
+
+Evidence is mapped in [GPT56_CODEX_CONTRIBUTIONS.md](docs/judging/GPT56_CODEX_CONTRIBUTIONS.md).
+
+## Safety and integrity boundaries
+
+- Findings are limited to visible evidence; the product does not infer voltage, continuity, polarity, or electrical safety.
+- A finding changes to `resolved` only through an explicit matching outcome on a newer usable frame at the confidence threshold.
+- Incident execution requires a short-lived token bound to the session, user, organization, exact action version, severity, destination, and nonce.
+- Workspace identity and inspector identity in the PDF come from the signed server session, not report body fields.
+- The PDF SHA-256 checksum verifies generated bytes. It does not prove that submitted evidence was truthful.
+- Browser history is local and non-durable. Best-effort throttles and consumed nonces are process-local in the serverless deployment.
 
 ## Local setup
 
-Requirements: Node.js 20.9+ and pnpm 10+.
-
 ```bash
 pnpm install
-copy .env.example .env.local
+cp .env.example .env.local
 pnpm dev
 ```
 
-Set `OPENAI_API_KEY`, a random 32+ character `SESSION_SECRET`, and optionally the signed webhook values. The Realtime and inspection model names default to the required models. There is no mock production fallback.
-
-## Environment variables
+Required for production: a random 32+ character `SESSION_SECRET`. The default judge engine needs no OpenAI key.
 
 | Variable | Purpose |
-|---|---|
-| `OPENAI_API_KEY` | Server-only Realtime and Responses API authentication |
-| `OPENAI_REALTIME_MODEL` | Defaults to `gpt-realtime-2.1` |
-| `OPENAI_INSPECTION_MODEL` | Defaults to `gpt-5.6` |
-| `SESSION_SECRET` | Signs sessions and exact action confirmations |
-| `AEGIS_EXTERNAL_WEBHOOK_URL` | Optional separately deployed incident receiver |
-| `AEGIS_EXTERNAL_WEBHOOK_SECRET` | HMAC-SHA256 signing key |
-| `NEXT_PUBLIC_APP_URL` | Deployment origin |
+| --- | --- |
+| `AEGIS_DEFAULT_ENGINE=local-spatial` | Documents the submitted default engine |
+| `OPENAI_LIVE_ENABLED=false` | Prevents optional OpenAI calls |
+| `SESSION_SECRET` | Signs ephemeral sessions and action confirmations |
+| `JUDGE_ACCESS_CODE` | Optional server-only gated judge code |
+| `OPENAI_API_KEY` | Optional server-only OpenAI authentication |
+| `OPENAI_INSPECTION_MODEL` | Optional GPT-5.6 adapter model |
+| `OPENAI_REALTIME_MODEL` | Optional Realtime adapter model |
 
-## Persistence and database
-
-The current MVP persists inspection state and completed history in the authenticated browser profile; server integrations are stateless. This makes the complete single-device judge path durable across refreshes but is not a production multi-device database. A production deployment must replace this repository with organization-scoped PostgreSQL/Supabase tables and RLS before claiming multi-device tenancy. This limitation is intentional and disclosed, not hidden behind simulated records.
-
-## Tests
+## Release gates
 
 ```bash
 pnpm lint
@@ -93,24 +101,28 @@ pnpm typecheck
 pnpm test
 pnpm test:integration
 pnpm test:e2e
+pnpm test:no-credit
 pnpm build
 pnpm eval
+pnpm security:scan
+pnpm audit:ci
 ```
 
-The offline evaluation in `evals/reports/latest.*` measures contract enforcement only. It makes no unmeasured model-accuracy claim.
+`test:e2e` runs the rendered judge workflow in desktop and mobile Chromium. `test:no-credit` asserts no OpenAI request occurs and reruns the core browser path with `OPENAI_LIVE_ENABLED=false`. `test:live` is optional and refuses to run without explicit live configuration.
 
-## Judge path and sample data
+## Judge-kit evaluation
 
-Follow [JUDGE_TESTING_INSTRUCTIONS.md](JUDGE_TESTING_INSTRUCTIONS.md). The original generated assets in `public/judge-kit` show the same de-energized board with J2 disconnected and correctly seated. They are alternate image inputs, not precomputed AI results; both use the live analysis route.
+The reproducible **Aegis Local Spatial Engine judge-kit evaluation** uses eight project-owned or generated variants. Included-fixture results: fault detection 3/3, corrected-state detection 2/2, scene rejection 3/3, zero false positives on corrected fixtures, verification 2/2, overlay-region IoU 1.0, and deterministic repeatability 100%. This is a small fixture evaluation, not a general accuracy or safety claim. See [JSON](evals/reports/local-engine-latest.json) and [HTML](evals/reports/local-engine-latest.html).
 
-## Deployment
+## Honest limitations
 
-Production is deployed at https://aegis-os-delta.vercel.app as a Node.js Next.js application. HTTPS, signed workspace authentication, security headers, and PDF generation were verified against production. The live GPT-5.6 request reaches OpenAI with an accepted strict schema but currently returns `429 exceeded current quota`; API billing/credits must be enabled before the judge flow can complete.
+- The submitted pack checks one visible electronics fault class: J2 connector seating.
+- Uploaded judge-kit images use aspect-ratio validation and canonical resizing. Camera frames use a fixed alignment guide and are rejected when framing is inadequate; automatic perspective correction is not claimed.
+- Completed history is browser-local, not a durable organization database.
+- The external webhook receiver is optional and unconfigured; internal incidents work.
+- Browser voice depends on Chrome-compatible Speech Recognition support; buttons remain the reliable path.
+- The optional OpenAI adapters are implemented but were not live-verified in the no-credit deployment.
 
-## Security and privacy
+The repository is currently named `aedis-os` while the product is Aegis-OS. Owner action: rename it to `aegis-os` only after confirming GitHub redirects and Vercel Git integration.
 
-Secrets stay server-side; session and action inputs are signed and validated; confirmations bind exact arguments; duplicate confirmation is rejected; CSP and Permissions Policy are set; webhook deliveries use HMAC and timeouts. Raw audio and continuous video are not stored. See [SECURITY.md](SECURITY.md).
-
-## Build Week record, limitations, and license
-
-See [BUILD_WEEK_DEVELOPMENT_RECORD.md](BUILD_WEEK_DEVELOPMENT_RECORD.md), [IMPLEMENTATION_STATUS.md](IMPLEMENTATION_STATUS.md), and [docs/judging/KNOWN_LIMITATIONS.md](docs/judging/KNOWN_LIMITATIONS.md). Licensed under MIT; judge assets are project-owned AI-generated material documented in [ASSET_LICENSES.md](docs/judging/ASSET_LICENSES.md).
+MIT licensed.

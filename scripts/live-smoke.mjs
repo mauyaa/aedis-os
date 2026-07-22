@@ -1,57 +1,11 @@
 import { readFile } from "node:fs/promises";
 
-const baseUrl = (process.argv[2] || "https://aegis-os-delta.vercel.app").replace(/\/$/, "");
-const homeResponse = await fetch(baseUrl);
-console.log(`HOME_STATUS=${homeResponse.status}`);
-console.log(`CSP_PRESENT=${homeResponse.headers.has("content-security-policy")}`);
-console.log(`PERMISSIONS_POLICY_PRESENT=${homeResponse.headers.has("permissions-policy")}`);
-
-const authResponse = await fetch(`${baseUrl}/api/auth/session`, {
-  method: "POST",
-  headers: { "content-type": "application/json" },
-  body: JSON.stringify({ email: "judge@aegis.local", workspace: "Aegis Judge Lab" }),
-});
-const auth = await authResponse.json();
-console.log(`AUTH_STATUS=${authResponse.status}`);
-if (!authResponse.ok || !auth.token) process.exit(1);
-
-const image = await readFile(new URL("../public/judge-kit/aegis-board-fault.png", import.meta.url));
-const sessionId = crypto.randomUUID();
-const analysisResponse = await fetch(`${baseUrl}/api/analysis`, {
-  method: "POST",
-  headers: { "content-type": "application/json", authorization: `Bearer ${auth.token}` },
-  body: JSON.stringify({
-    sessionId,
-    requestId: crypto.randomUUID(),
-    frameId: crypto.randomUUID(),
-    imageDataUrl: `data:image/png;base64,${image.toString("base64")}`,
-    width: 1536,
-    height: 1024,
-    intent: "inspection",
-    currentStepId: "step-1",
-    previousFindings: [],
-  }),
-});
-const analysis = await analysisResponse.json().catch(() => ({}));
-console.log(`ANALYSIS_STATUS=${analysisResponse.status}`);
-if (analysisResponse.ok) {
-  console.log(`ANALYSIS_MODEL=${analysis.meta?.model}`);
-  console.log(`ANALYSIS_VALIDATION=${analysis.meta?.validation}`);
-  console.log(`SCENE_USABLE=${analysis.result?.sceneQuality?.usable}`);
-  console.log(`FINDING_COUNT=${analysis.result?.findings?.length ?? 0}`);
-  console.log(`SUMMARY=${analysis.result?.summary}`);
-} else {
-  console.log(`ANALYSIS_ERROR=${analysis.error || "unknown"}`);
-  console.log(`ANALYSIS_DETAIL=${String(analysis.detail || "none").slice(0, 800)}`);
-}
-
-const reportResponse = await fetch(`${baseUrl}/api/report`, {
-  method: "POST",
-  headers: { "content-type": "application/json", authorization: `Bearer ${auth.token}` },
-  body: JSON.stringify({ sessionId, workspace: "Aegis Judge Lab", inspector: "judge@aegis.local", startedAt: new Date().toISOString(), completedAt: null, findings: [], incidents: [], events: [{ at: new Date().toISOString(), label: "Live production verification" }] }),
-});
-console.log(`REPORT_STATUS=${reportResponse.status}`);
-console.log(`REPORT_PDF=${reportResponse.headers.get("content-type")}`);
-console.log(`REPORT_CHECKSUM=${reportResponse.headers.has("x-aegis-sha256")}`);
-
-if (!homeResponse.ok || !analysisResponse.ok || !reportResponse.ok) process.exit(1);
+const baseUrl = (process.argv[2] || "https://aegis-os-delta.vercel.app").replace(/\/$/, ""); const sessionId = crypto.randomUUID();
+const homeResponse = await fetch(baseUrl); console.log(`HOME_STATUS=${homeResponse.status}`); console.log(`CSP_PRESENT=${homeResponse.headers.has("content-security-policy")}`); console.log(`PERMISSIONS_POLICY_PRESENT=${homeResponse.headers.has("permissions-policy")}`);
+const authResponse = await fetch(`${baseUrl}/api/auth/session`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ email: "judge@aegis.local", workspace: "Aegis Judge Lab", sessionId }) }); const auth = await authResponse.json(); console.log(`AUTH_STATUS=${authResponse.status}`); if (!authResponse.ok || !auth.token) process.exit(1);
+const analyze = async (name, intent, previousFindings = []) => { const image = await readFile(new URL(`../public/judge-kit/${name}`, import.meta.url)); const response = await fetch(`${baseUrl}/api/analysis`, { method: "POST", headers: { "content-type": "application/json", authorization: `Bearer ${auth.token}` }, body: JSON.stringify({ sessionId, requestId: crypto.randomUUID(), frameId: crypto.randomUUID(), imageDataUrl: `data:image/png;base64,${image.toString("base64")}`, width: 1536, height: 1024, intent, currentStepId: "step-2", previousFindings, engine: "local-spatial" }) }); const body = await response.json(); console.log(`${intent.toUpperCase()}_STATUS=${response.status}`); if (!response.ok) throw new Error(body.error); return body.result; };
+const fault = await analyze("aegis-board-fault.png", "inspection"); console.log(`ENGINE=${fault.engineMetadata.engine}@${fault.engineMetadata.engineVersion}`); console.log(`FAULT_COUNT=${fault.findings.length}`); if (fault.engineMetadata.engine !== "local-spatial" || fault.findings.length !== 1) process.exit(1);
+const finding = { ...fault.findings[0], id: "production-j2", status: "unverified", createdAt: new Date().toISOString() }; const corrected = await analyze("aegis-board-corrected.png", "verification", [finding]); console.log(`VERIFICATION=${corrected.verificationOutcomes[0]?.status}`); if (corrected.verificationOutcomes[0]?.status !== "resolved") process.exit(1);
+const proposalResponse = await fetch(`${baseUrl}/api/actions/propose`, { method: "POST", headers: { "content-type": "application/json", authorization: `Bearer ${auth.token}` }, body: JSON.stringify({ sessionId, findingId: finding.id, title: finding.title, description: finding.description, severity: finding.severity }) }); const proposal = await proposalResponse.json(); const executeResponse = await fetch(`${baseUrl}/api/actions/execute`, { method: "POST", headers: { "content-type": "application/json", authorization: `Bearer ${auth.token}` }, body: JSON.stringify({ confirmationToken: proposal.confirmationToken, decision: "approved" }) }); console.log(`INCIDENT_STATUS=${executeResponse.status}`);
+const reportResponse = await fetch(`${baseUrl}/api/report`, { method: "POST", headers: { "content-type": "application/json", authorization: `Bearer ${auth.token}` }, body: JSON.stringify({ sessionId, startedAt: new Date(Date.now() - 1000).toISOString(), completedAt: new Date().toISOString(), findings: [{ title: finding.title, severity: finding.severity, status: "resolved", confidence: finding.confidence, description: finding.description }], incidents: [], events: [{ at: new Date().toISOString(), label: "Production Local Spatial smoke test" }] }) }); console.log(`REPORT_STATUS=${reportResponse.status}`); console.log(`REPORT_PDF=${reportResponse.headers.get("content-type")}`); console.log(`REPORT_CHECKSUM=${reportResponse.headers.has("x-aegis-sha256")}`);
+if (!homeResponse.ok || !executeResponse.ok || !reportResponse.ok) process.exit(1); console.log("PRODUCTION_LOCAL_SMOKE=passed");

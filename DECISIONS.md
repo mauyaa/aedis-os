@@ -1,10 +1,13 @@
 # Decisions
 
-1. **One reliable vertical slice.** Electronics pre-power visual inspection is the only complete domain path; breadth was cut before core reliability.
-2. **Two loops, one authority boundary.** Realtime handles conversation and intent; GPT-5.6 Responses produces physical findings; Zod and policy code are final authorities.
-3. **Real frame selection, not video claims.** Live media stays in the browser and only a user- or tool-triggered JPEG is submitted.
-4. **Browser-local MVP persistence.** This makes the single-device judge journey work without inventing database credentials. PostgreSQL/RLS is explicitly required for multi-device production.
-5. **Internal incident always works.** External webhook delivery is optional, signed, idempotency-keyed, timed out, and honestly labeled when unconfigured.
-6. **Exact action confirmation.** The signed token binds organization, session, finding, title, description, severity, expiry, and nonce.
-7. **Generated owned targets.** A before/after board pair provides reproducible safe evidence without copyrighted material.
-
+1. **One complete domain pack.** Electronics J2 seating is the only scored inspection; unrelated scope was cut.
+2. **Local Spatial is production, not a mock fallback.** It analyzes decoded pixels and declares measurements, thresholds, confidence, and uncertainty.
+3. **Optional OpenAI is explicit.** Responses and Realtime adapters remain implemented behind `OPENAI_LIVE_ENABLED=true`; disabled features are never presented as active.
+4. **Verification is outcome-driven.** Empty new findings never resolve old ones. Exactly one matching newer-frame outcome is required for each unresolved finding.
+5. **Only rendered anchor types are accepted.** The active contract is box-only.
+6. **Real frame capture, no continuous-video claim.** Camera preview stays local; one requested frame is analyzed.
+7. **Browser-native voice is progressive enhancement.** It is labeled accurately and every command has a button.
+8. **Browser-local MVP history.** No durable multi-tenant persistence claim is made.
+9. **Internal incident always works.** External signed delivery is optional and accurately labeled.
+10. **Exact action confirmation.** Short-lived tokens bind identity, session, finding, severity, action version, destination, expiry, and nonce.
+11. **Owned target pair.** Before/after assets enable reproducible evaluation without third-party material.

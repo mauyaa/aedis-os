@@ -9,7 +9,9 @@ export async function POST(request: Request) {
   const identity = identityFromRequest(request); if (!identity) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   const parsed = schema.safeParse(await request.json().catch(() => null)); if (!parsed.success) return NextResponse.json({ error: "Invalid confirmation" }, { status: 400 });
   const action = verifyAction(parsed.data.confirmationToken);
-  if (!action || action.organizationId !== identity.organizationId) return NextResponse.json({ error: "Confirmation is invalid or expired" }, { status: 403 });
+  if (!action || action.organizationId !== identity.organizationId || action.userId !== identity.userId || action.sessionId !== identity.inspectionSessionId) return NextResponse.json({ error: "Confirmation is invalid or expired" }, { status: 403 });
+  const expectedDestination = process.env.AEGIS_EXTERNAL_WEBHOOK_URL ? "configured-webhook" : "internal-only";
+  if (action.destination !== expectedDestination) return NextResponse.json({ error: "Action destination changed; request a new confirmation" }, { status: 409 });
   if (consumed.has(action.nonce)) return NextResponse.json({ error: "This confirmation was already used" }, { status: 409 });
   consumed.add(action.nonce);
   const incident = { id: `INC-${crypto.randomUUID().slice(0, 8).toUpperCase()}`, organizationId: action.organizationId, sessionId: action.sessionId, findingId: action.findingId, title: action.title, description: action.description, severity: action.severity, verificationStatus: "awaiting-human-verification", createdAt: new Date().toISOString(), createdBy: identity.userId, actionStatus: "created" };
@@ -26,4 +28,3 @@ export async function POST(request: Request) {
   }
   return NextResponse.json({ incident, delivery });
 }
-

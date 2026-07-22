@@ -1,40 +1,31 @@
-# Build Week development record
+# Aegis-OS Build Week development record
 
-## Dates and pre-existing work
+This repository was built and adversarially repaired in the primary Codex task during Build Week.
 
-Primary build date: 22 July 2026. The provided `D:\aedis-os` workspace was empty when the primary Codex task began. Git was rooted at `D:\`, so unrelated parent-drive history was deliberately excluded. No pre-existing Aegis-OS commits were available to cite.
+## Engineering sequence
 
-## Primary Codex session
-
-This project task is the major Codex session. Codex read the product specification and winning-execution override, initialized Next.js, implemented the architecture and judge flow, created tests and documentation, generated owned judge assets, and ran the recorded quality gates. The `/feedback` Session ID has not been generated or fabricated.
-
-## Work completed with Codex
-
-- Trusted Realtime SDP bridge, prompt, safety identifier, and tool definition
-- GPT-5.6 Responses integration, JSON Schema, Zod validation, repair retry
-- Camera/upload capture, actual audio waveform, responsive inspection HUD
-- Coordinate transform and overlay engine
-- Finding verification, procedure, audit history, action authorization, incident delivery
-- PDF transformation and checksum
-- Contract, auth, action, report, spatial, workflow, and evaluation tests
-- Security, architecture, judge, demo, and submission materials
-
-## Bugs found and fixed with Codex
-
-- Bundled Linux-only site initializer could not run because WSL had no distribution; replaced with supported Windows Next.js setup.
-- pnpm store mismatch after initialization; reused the exact established store rather than relinking a different store.
-- Initial production build depended on a Google Fonts network fetch; replaced it with the bundled `geist` package and rebuilt successfully.
-- The production audit found a moderate PostCSS advisory; pinned the transitive dependency to 8.5.10, refreshed the lockfile, and verified zero known production vulnerabilities.
-- A floating-point exact-equality assertion in the spatial test was corrected to the appropriate tolerance check.
-- Production smoke testing found two Responses API strict-schema incompatibilities (`oneOf` and untyped `const` discriminators); both were fixed with regression coverage. The subsequent request reached OpenAI and exposed the remaining account quota blocker truthfully.
+1. Built the two-loop inspection workspace: conversational control plus precision spatial analysis.
+2. Defined strict Zod and JSON Schema contracts, 0–1000 coordinates, session authorization, human-confirmed actions, reporting, and judge assets.
+3. Deployed the initial build and used real production errors to repair JSON Schema compatibility (`oneOf` to supported strict forms and typed discriminators).
+4. Confirmed the remaining 429 was account quota, not a schema or transport defect. No mock success was introduced.
+5. Adopted the no-credit release architecture: a real Local Spatial production engine plus explicitly disabled optional OpenAI adapters.
+6. Implemented decoded-pixel validation, scene metrics, canonical alignment, global/ROI comparisons, confidence and uncertainty.
+7. Removed the unsafe “zero findings resolves all” shortcut and added explicit previous-finding verification outcomes with request/frame binding.
+8. Added device-native Browser Voice Commands, exact internal incident confirmation, trusted report identity, throttles, and truthful UI state.
+9. Replaced the false state-only E2E claim with actual desktop and mobile Playwright journeys.
+10. Added fixture variants, no-credit/no-outbound-call tests, CI, evaluation reports, security scans, and release documentation.
 
 ## Human decisions
 
-The human chose the Aegis-OS mission, electronics scenario, closed-loop requirement, model names, preferred stack, human-approval boundary, design character, MVP priority, and hackathon success criteria. Codex selected the concrete implementation details inside those boundaries.
+The owner chose the electronics technician workflow, the high-stakes requirement not to fabricate runtime OpenAI output, the no-credit constraint, the Work & Productivity category, the premium technical interface direction, and the priority of a complete judge journey over unrelated feature expansion.
 
-## Commit timeline
+## Codex/GPT-5.6 distinction
 
-- [`6a5fc48`](https://github.com/mauyaa/aedis-os/commit/6a5fc48) — initial complete Aegis-OS inspection platform: application, OpenAI adapters, security controls, tests, judge kit, evaluation artifact, and submission documentation.
-- This documentation follow-up records the real GitHub publication; no pre-existing Aegis-OS commit was present when the build began.
+GPT-5.6 was meaningfully used through Codex during the design,
+implementation, testing, and adversarial review of Aegis-OS.
+The submitted hosted judge path uses the deterministic Local Spatial
+Engine because Build Week credits are Codex credits rather than API credits.
+The optional GPT-5.6 Responses adapter remains implemented but is not
+presented as active in the submitted deployment.
 
-- [ ] Add primary Codex `/feedback` Session ID to Devpost form
+No claim is made that GPT-5.6 generated the hosted judge findings. Detailed file evidence is in `docs/judging/GPT56_CODEX_CONTRIBUTIONS.md`.

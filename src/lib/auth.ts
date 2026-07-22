@@ -1,6 +1,6 @@
 import { createHmac, timingSafeEqual } from "node:crypto";
 
-export type SessionIdentity = { userId: string; email: string; organizationId: string; exp: number };
+export type SessionIdentity = { userId: string; email: string; organizationId: string; workspaceName: string; inspectionSessionId: string; exp: number };
 const developmentSecret = "aegis-development-only-secret-not-for-production";
 function secret() {
   const value = process.env.SESSION_SECRET;
@@ -23,4 +23,3 @@ export function verifySession(token: string | null): SessionIdentity | null {
   try { const value = JSON.parse(Buffer.from(payload, "base64url").toString()) as SessionIdentity; return value.exp > Date.now() / 1000 ? value : null; } catch { return null; }
 }
 export function identityFromRequest(request: Request) { return verifySession(request.headers.get("authorization")?.replace(/^Bearer\s+/i, "") || null); }
-

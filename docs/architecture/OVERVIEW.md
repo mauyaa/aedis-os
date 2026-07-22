@@ -1,6 +1,9 @@
 # Architecture overview
 
-Aegis-OS is a Next.js App Router application with a browser media/UI layer and trusted Node route handlers. The browser owns the continuous camera preview, microphone stream, frame canvas, WebRTC peer connection, overlay transform, and device-local MVP history. The server owns credentials, signed identities, session prompts, OpenAI calls, schema validation, action confirmation, outbound webhook signing, and report generation.
+Aegis-OS is a Next.js App Router application with two explicit inspection engines.
 
-The judged path intentionally avoids extra services that cannot be configured truthfully in an empty repository. Production multi-device use requires PostgreSQL/Supabase RLS and durable job execution; the API contracts are ready for that replacement.
+`local-spatial` is the submitted production engine. The browser owns camera preview, explicit frame capture, device-native voice commands, responsive overlay mapping, and local history. A Node route owns binary validation, Sharp decoding, the versioned inspection pack, scene metrics, reference comparisons, confidence, request/frame binding, signed authorization, action confirmation, and PDF generation.
 
+`openai-precision` is an optional adapter. It preserves the GPT-5.6 Responses strict-schema path and GPT-Realtime-2.1 SDP/function-output path, but is unavailable unless the operator explicitly sets `OPENAI_LIVE_ENABLED=true` and provides separately funded credentials.
+
+There is no production database. Multi-device persistence would require a durable store with row-level authorization; it is not claimed by this release.
