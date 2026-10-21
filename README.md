@@ -1,40 +1,36 @@
 # Aegis-OS
 
-Aegis-OS is a resilient spatial inspection workspace that performs deterministic local checks without cloud dependency and includes an optional OpenAI precision architecture for broader inspections.
+Aegis-OS is a spatial inspection workspace for electronics. It inspects a frame, marks the fault on the image, requires approval before acting, verifies the correction against a newer frame, and exports a checksummed PDF report. Checks run deterministically on the server with no cloud dependency; an optional OpenAI precision engine covers broader inspections.
 
-**Live judge build:** https://aegis-os-delta.vercel.app
+**Live demo:** https://aegis-os-delta.vercel.app
 
-**Repository:** https://github.com/mauyaa/aedis-os
-
-**Category:** Work & Productivity
-
-## Judge journey
+## Try it
 
 No API key, payment, account, or proprietary hardware is required.
 
-1. Enter the ephemeral judge workspace.
-2. Load the owned fault target and choose **Inspect frame**.
+1. Enter the ephemeral demo workspace.
+2. Load the fault target and choose **Inspect frame**.
 3. Review measured scene quality, Local Spatial v1 metadata, the normalized J2 overlay, confidence, evidence, and failed procedure state.
-4. Create an internal incident, review the exact action, reject or approve it.
+4. Create an internal incident, review the exact action, and reject or approve it.
 5. Load the corrected target and choose **Verify correction**.
 6. Review the explicit `resolved` outcome tied to a newer frame ID.
 7. Complete the inspection, download the checksummed PDF, and open local history.
 
-Chrome users can perform the same commands through device-native **Browser Voice Commands**. Every command also has a button.
+Chrome users can run the same commands through device-native **Browser Voice Commands**. Every command also has a button.
 
-## Working architecture
+## Architecture
 
-The public deployment defaults to `local-spatial`. Submitted image pixels are decoded on the server with MIME-signature, byte-size, pixel-count, dimension, and format validation. The versioned `electronics-j2@1.0.0` pack defines the canonical reference, known-fault reference, scene thresholds, J2 region, decision thresholds, safe correction, and verification method.
+The deployment defaults to `local-spatial`. Submitted image pixels are decoded on the server with MIME-signature, byte-size, pixel-count, dimension, and format validation. The versioned `electronics-j2@1.0.0` pack defines the canonical reference, known-fault reference, scene thresholds, J2 region, decision thresholds, safe correction, and verification method.
 
 The engine measures normalized luminance, contrast, gradient sharpness, aspect-ratio alignment, global reference distance, and J2-region reference distance. Weak margins return `uncertain`; poor scenes never resolve findings. Spatial boxes use the normalized 0–1000 contract and are mapped through contain, cover, crop, letterbox, and mirror transforms.
 
-The optional `openai-precision` adapter retains the official OpenAI SDK, GPT-5.6 Responses request, strict JSON Schema, Zod validation, request/frame binding, verification outcomes, timeout and error mapping. The GPT-Realtime-2.1 SDP adapter and bounded function-result handoff also remain implemented. Both are disabled unless `OPENAI_LIVE_ENABLED=true`; the hosted judge flow never calls them.
+The optional `openai-precision` adapter uses the official OpenAI SDK with a GPT-5.6 Responses request, strict JSON Schema, Zod validation, request/frame binding, verification outcomes, and timeout and error mapping. A GPT-Realtime-2.1 SDP adapter with a bounded function-result handoff is also implemented. Both are disabled unless `OPENAI_LIVE_ENABLED=true`.
 
 ## Engine matrix
 
 | Capability | Local Spatial | OpenAI Precision |
 | --- | --- | --- |
-| Submitted judge deployment | Available | Disabled |
+| Hosted demo | Enabled | Disabled |
 | Requires API credits | No | Yes |
 | Scene-quality check | Yes | Implemented adapter |
 | J2 reference inspection | Yes | Implemented adapter |
@@ -42,27 +38,6 @@ The optional `openai-precision` adapter retains the official OpenAI SDK, GPT-5.6
 | Correction verification | Yes | Implemented adapter |
 | Browser voice commands | Yes | N/A |
 | OpenAI Realtime voice | No | Implemented adapter |
-
-## Why the submitted judge mode is local
-
-Build Week provided Codex credits rather than OpenAI API credits.
-Aegis-OS therefore ships a fully working Local Spatial Engine for the
-public judge path. GPT-5.6 was used meaningfully through Codex to design,
-implement, test, and adversarially review the inspection contracts,
-coordinate system, safety policy, and release architecture.
-
-The repository also contains the optional GPT-5.6 Responses and Realtime
-adapters. They are disabled in the hosted judge deployment and are not
-represented as active.
-
-GPT-5.6 was meaningfully used through Codex during the design,
-implementation, testing, and adversarial review of Aegis-OS.
-The submitted hosted judge path uses the deterministic Local Spatial
-Engine because Build Week credits are Codex credits rather than API credits.
-The optional GPT-5.6 Responses adapter remains implemented but is not
-presented as active in the submitted deployment.
-
-Evidence is mapped in [GPT56_CODEX_CONTRIBUTIONS.md](docs/judging/GPT56_CODEX_CONTRIBUTIONS.md).
 
 ## Safety and integrity boundaries
 
@@ -81,14 +56,14 @@ cp .env.example .env.local
 pnpm dev
 ```
 
-Required for production: a random 32+ character `SESSION_SECRET`. The default judge engine needs no OpenAI key.
+Required for production: a random 32+ character `SESSION_SECRET`. The default engine needs no OpenAI key.
 
 | Variable | Purpose |
 | --- | --- |
-| `AEGIS_DEFAULT_ENGINE=local-spatial` | Documents the submitted default engine |
+| `AEGIS_DEFAULT_ENGINE=local-spatial` | Default inspection engine |
 | `OPENAI_LIVE_ENABLED=false` | Prevents optional OpenAI calls |
 | `SESSION_SECRET` | Signs ephemeral sessions and action confirmations |
-| `JUDGE_ACCESS_CODE` | Optional server-only gated judge code |
+| `JUDGE_ACCESS_CODE` | Optional server-only access code for the hosted demo |
 | `OPENAI_API_KEY` | Optional server-only OpenAI authentication |
 | `OPENAI_INSPECTION_MODEL` | Optional GPT-5.6 adapter model |
 | `OPENAI_REALTIME_MODEL` | Optional Realtime adapter model |
@@ -108,21 +83,19 @@ pnpm security:scan
 pnpm audit:ci
 ```
 
-`test:e2e` runs the rendered judge workflow in desktop and mobile Chromium. `test:no-credit` asserts no OpenAI request occurs and reruns the core browser path with `OPENAI_LIVE_ENABLED=false`. `test:live` is optional and refuses to run without explicit live configuration.
+`test:e2e` runs the rendered inspection workflow in desktop and mobile Chromium. `test:no-credit` asserts no OpenAI request occurs and reruns the core browser path with `OPENAI_LIVE_ENABLED=false`. `test:live` is optional and refuses to run without explicit live configuration.
 
-## Judge-kit evaluation
+## Evaluation
 
-The reproducible **Aegis Local Spatial Engine judge-kit evaluation** uses eight project-owned or generated variants. Included-fixture results: fault detection 3/3, corrected-state detection 2/2, scene rejection 3/3, zero false positives on corrected fixtures, verification 2/2, overlay-region IoU 1.0, and deterministic repeatability 100%. This is a small fixture evaluation, not a general accuracy or safety claim. See [JSON](evals/reports/local-engine-latest.json) and [HTML](evals/reports/local-engine-latest.html).
+The reproducible Local Spatial Engine evaluation uses eight project-owned or generated variants. Included-fixture results: fault detection 3/3, corrected-state detection 2/2, scene rejection 3/3, zero false positives on corrected fixtures, verification 2/2, overlay-region IoU 1.0, and deterministic repeatability 100%. This is a small fixture evaluation, not a general accuracy or safety claim. See [JSON](evals/reports/local-engine-latest.json) and [HTML](evals/reports/local-engine-latest.html).
 
-## Honest limitations
+## Limitations
 
-- The submitted pack checks one visible electronics fault class: J2 connector seating.
-- Uploaded judge-kit images use aspect-ratio validation and canonical resizing. Camera frames use a fixed alignment guide and are rejected when framing is inadequate; automatic perspective correction is not claimed.
+- The current pack checks one visible electronics fault class: J2 connector seating.
+- Uploaded fixture images use aspect-ratio validation and canonical resizing. Camera frames use a fixed alignment guide and are rejected when framing is inadequate; automatic perspective correction is not claimed.
 - Completed history is browser-local, not a durable organization database.
 - The external webhook receiver is optional and unconfigured; internal incidents work.
 - Browser voice depends on Chrome-compatible Speech Recognition support; buttons remain the reliable path.
-- The optional OpenAI adapters are implemented but were not live-verified in the no-credit deployment.
-
-The repository is currently named `aedis-os` while the product is Aegis-OS. Owner action: rename it to `aegis-os` only after confirming GitHub redirects and Vercel Git integration.
+- The optional OpenAI adapters are implemented but have not been live-verified against the hosted deployment.
 
 MIT licensed.
