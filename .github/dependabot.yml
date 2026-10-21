@@ -1,0 +1,43 @@
+version: 2
+
+# Security advisories land against the dependency tree continuously, and the
+# `audit:ci` release gate fails the moment one is published at high severity.
+# Weekly grouped updates keep the tree current so the gate fails on new news,
+# not on months of accumulated drift.
+#
+# Minor and patch updates arrive as one pull request. Majors arrive alone,
+# because a single PR that crosses several breaking boundaries can only fail.
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      time: "05:11"
+      timezone: Africa/Nairobi
+    groups:
+      safe-updates:
+        patterns: ["*"]
+        update-types: ["minor", "patch"]
+    ignore:
+      # Next.js and its ESLint config move together; a major is a migration.
+      - dependency-name: next
+        update-types: ["version-update:semver-major"]
+      - dependency-name: eslint-config-next
+        update-types: ["version-update:semver-major"]
+      # @types/node tracks the Node 22 runtime used in CI, not the newest tag.
+      - dependency-name: "@types/node"
+        update-types: ["version-update:semver-major"]
+    open-pull-requests-limit: 5
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      time: "05:17"
+      timezone: Africa/Nairobi
+    groups:
+      workflow-actions:
+        patterns: ["*"]
+    open-pull-requests-limit: 5
